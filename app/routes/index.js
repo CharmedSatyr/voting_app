@@ -1,15 +1,17 @@
 'use strict';
 
-var ClickHandler = require(process.cwd() + '/app/controllers/clickHandler.server.js');
+const path = process.cwd();
 
-module.exports = function(app, db) {
+const ClickHandler = require(path + '/app/controllers/clickHandler.server.js');
 
-	var clickHandler = new ClickHandler(db);
+module.exports = (app) => {
+
+	const clickHandler = new ClickHandler();
 
 	app
 		.route('/')
-		.get(function(req, res) {
-			res.sendFile(process.cwd() + '/public/index.html');
+		.get((req, res) => {
+			res.sendFile(path + '/views/index.html');
 		});
 
 	app

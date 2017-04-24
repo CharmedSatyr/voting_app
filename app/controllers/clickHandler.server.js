@@ -1,71 +1,50 @@
 'use strict';
 
-function clickHandler(db) {
-	var clicks = db.collection('clicks');
+const Clicks = require('../models/clicks.js');
 
-	this.getClicks = function(req, res) {
+function ClickHandler() { //Convert to ES6 as a class, not an arrow function
 
-		var clickProjection = {
-			'_id': false
-		};
+	this.getClicks = (req, res) => {
 
-		clicks.findOne({}, clickProjection, function(err, result) {
-			if (err) {
+		Clicks.findOne({}, {'_id': false}).exec((err, result) => {
+			if (err)
 				throw err;
-			}
 
 			if (result) {
 				res.json(result);
 			} else {
-				clicks
-					.insert({
-						'clicks': 0
-					}, function(err) {
-						if (err) {
-							throw err;
-						}
+				const newDoc = new Clicks({'clicks': 0});
+				newDoc.save(function(err, doc) {
+					if (err)
+						throw err;
 
-						clicks
-							.findOne({}, clickProjection, function(err, doc) {
-								if (err) {
-									throw err;
-								}
-
-								res.json(doc);
-							});
-					});
+					res.json(doc);
+				});
 			}
 		});
 	};
 
-	this.addClick = function(req, res) {
-		clicks
-			.findAndModify({}, {
-				'_id': 1
-			}, {
-				$inc: {
-					'clicks': 1
-				}
-			}, function(err, result) {
-				if (err) {
-					throw err;
-				}
+	this.addClick = (req, res) => {
+		Clicks.findOneAndUpdate({}, {
+			$inc: {
+				'clicks': 1
+			}
+		}).exec((err, result) => {
+			if (err)
+				throw err;
 
-				res.json(result);
-			});
+			res.json(result);
+		});
 	};
 
-	this.resetClicks = function(req, res) {
-		clicks
-			.update({}, {
-				'clicks': 0
-			}, function(err, result) {
-				if (err) {
-					throw err;
-				}
-				res.json(result);
-			});
+	this.resetClicks = (req, res) => {
+		Clicks.findOneAndUpdate({}, {'clicks': 0}).exec((err, result) => {
+			if (err)
+				throw err;
+
+			res.json(result);
+		});
 	};
 }
 
-module.exports = clickHandler;
+module.exports = ClickHandler;

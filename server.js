@@ -2,26 +2,22 @@
 
 const express = require('express'),
 	routes = require('./app/routes/index.js'),
-	mongo = require('mongodb').MongoClient;
+	mongoose = require('mongoose');
 
-const port = 3000,
-	dbport = 27017;
+//const path = process.cwd();
+
+const port = process.env.PORT || 8080,
+	dbport = process.env.DBPORT || 27017;
 
 const app = express();
 
-mongo.connect('mongodb://localhost:' + dbport + '/voting_app', (err, db) => {
+mongoose.connect('mongodb://localhost:' + dbport + '/voting_app');
 
-	(err)
-		? console.error('Database failed to connect!')
-		: console.log('MongoDB successfully connected on port', dbport);
+app.use('/views', express.static(process.cwd() + '/views'));
+app.use('/controllers', express.static(process.cwd() + '/app/controllers'));
 
-	app.use('/public', express.static(process.cwd() + '/public'));
-	app.use('/controllers', express.static(process.cwd() + '/app/controllers'));
+routes(app);
 
-	routes(app, db);
-
-	app.listen(port, function() {
-		console.log('Listening on port', port);
-	});
-
+app.listen(port, function() {
+	console.log('Listening on port', port);
 });

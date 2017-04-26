@@ -1,57 +1,31 @@
 'use strict';
 
 (() => {
-	const addButton = document.querySelector('.btn-add');
-	const deleteButton = document.querySelector('.btn-delete');
-	const clickNbr = document.querySelector('#click-nbr');
-	const port = 8080;
-	const apiUrl = 'http://localhost:' + port + '/api/clicks';
+   const addButton = document.querySelector('.btn-add');
+   const deleteButton = document.querySelector('.btn-delete');
+   const clickNbr = document.querySelector('#click-nbr');
+   const apiUrl = appUrl + '/api/:id/clicks';
 
-	const ready = (fn) => {
-		if (typeof fn !== 'function') {
-			return;
-		}
+   const updateClickCount = (data) => {
+      const clicksObject = JSON.parse(data);
+      clickNbr.innerHTML = clicksObject.clicks;
+   }
 
-		if (document.readyState === 'complete') {
-			return fn();
-		}
+   ajaxFunctions.ready(ajaxFunctions.ajaxRequest('GET', apiUrl, updateClickCount));
 
-		document.addEventListener('DOMContentLoaded', fn, false);
-	}
 
-	const ajaxRequest = (method, url, callback) => {
-		const xmlhttp = new XMLHttpRequest();
+   addButton.addEventListener('click', () => {
+      ajaxFunctions.ajaxRequest('POST', apiUrl, () => {
+         ajaxFunctions.ajaxRequest('GET', apiUrl, updateClickCount)
+      });
 
-		xmlhttp.onreadystatechange = () => {
-			if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-				callback(xmlhttp.response);
-			}
-		};
+   }, false);
 
-		xmlhttp.open(method, url, true);
-		xmlhttp.send();
-	}
+   deleteButton.addEventListener('click', () => {
+      ajaxFunctions.ajaxRequest('DELETE', apiUrl, () => {
+         ajaxFunctions.ajaxRequest('GET', apiUrl, updateClickCount);
+      });
 
-	const updateClickCount = (data) => {
-		const clicksObject = JSON.parse(data);
-		clickNbr.innerHTML = clicksObject.clicks;
-	}
-
-	ready(ajaxRequest('GET', apiUrl, updateClickCount));
-
-	addButton.addEventListener('click', () => {
-		ajaxRequest('POST', apiUrl, () => {
-			ajaxRequest('GET', apiUrl, updateClickCount)
-		});
-
-	}, false);
-
-	deleteButton.addEventListener('click', () => {
-
-		ajaxRequest('DELETE', apiUrl, () => {
-			ajaxRequest('GET', apiUrl, updateClickCount);
-		});
-
-	}, false);
+   }, false);
 
 })();

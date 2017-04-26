@@ -1,50 +1,67 @@
 'use strict';
 
-const Clicks = require('../models/clicks.js');
+const Users = require('../models/users.js');
 
-function ClickHandler() { //Convert to ES6 as a class, not an arrow function
+class ClickHandler {
+   constructor(req, res) {
+      this.getClicks = (req, res) => {
+         Users
+            .findOne({
+               'github.id': req.user.github.id
+            })
+            .exec((err, result) => {
+               if (err)
+                  throw err;
 
-	this.getClicks = (req, res) => {
+               if (result) {
+                  res.json(result.nbrClicks);
 
-		Clicks.findOne({}, {'_id': false}).exec((err, result) => {
-			if (err)
-				throw err;
+               } else {
+                  const newDoc = new Clicks({
+                     'clicks': 0
+                  });
+                  newDoc.save((err, doc) => {
+                     if (err)
+                        throw err;
 
-			if (result) {
-				res.json(result);
-			} else {
-				const newDoc = new Clicks({'clicks': 0});
-				newDoc.save(function(err, doc) {
-					if (err)
-						throw err;
+                     res.json(doc);
+                  });
+               }
+            });
+      };
 
-					res.json(doc);
-				});
-			}
-		});
-	};
+      this.addClick = (req, res) => {
+         Users
+            .findOneAndUpdate({
+               'github.id': req.user.github.id
+            }, {
+               $inc: {
+                  'nbrClicks.clicks': 1
+               }
+            })
+            .exec((err, result) => {
+               if (err)
+                  throw err;
 
-	this.addClick = (req, res) => {
-		Clicks.findOneAndUpdate({}, {
-			$inc: {
-				'clicks': 1
-			}
-		}).exec((err, result) => {
-			if (err)
-				throw err;
+               res.json(result.nbrClicks);
+            });
+      };
 
-			res.json(result);
-		});
-	};
+      this.resetClicks = (req, res) => {
+         Users
+            .findOneAndUpdate({
+               'github.id': req.user.github.id
+            }, {
+               'nbrClicks.clicks': 0
+            })
+            .exec((err, result) => {
+               if (err)
+                  throw err;
 
-	this.resetClicks = (req, res) => {
-		Clicks.findOneAndUpdate({}, {'clicks': 0}).exec((err, result) => {
-			if (err)
-				throw err;
-
-			res.json(result);
-		});
-	};
+               res.json(result.nbrClicks);
+            });
+      };
+   }
 }
 
 module.exports = ClickHandler;

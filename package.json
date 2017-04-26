@@ -1,35 +1,35 @@
 {
-  "name": "voting_app",
-  "version": "1.0.0",
-  "description": "'Build a Voting App' is a required project for freeCodeCamp's Back End Development Certification.",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CharmedSatyr/voting_app.git"
-  },
-  "keywords": [
-    "freeCodeCamp",
-    "Node",
-    "Express",
-    "MongoDB",
-    "MEAN",
-    "FCC"
-  ],
-  "author": "CharmedSatyr",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/CharmedSatyr/voting_app/issues"
-  },
-  "homepage": "https://github.com/CharmedSatyr/voting_app#readme",
-  "dependencies": {
-    "dotenv": "^4.0.0",
-    "express": "^4.15.2",
-    "express-session": "^1.15.2",
-    "mongoose": "^4.9.5",
-    "passport": "^0.3.2",
-    "passport-github": "^1.1.0"
-  }
+      "name": "voting_app",
+      "version": "1.0.0",
+      "description": "'Build a Voting App' is a required project for freeCodeCamp's Back End Development Certification.",
+      "main": "server.js",
+      "scripts": {
+            "start": "node server.js"
+      },
+      "repository": {
+            "type": "git",
+            "url": "git+https://github.com/CharmedSatyr/voting_app.git"
+      },
+      "keywords": [
+            "freeCodeCamp",
+            "Node",
+            "Express",
+            "MongoDB",
+            "MEAN",
+            "FCC"
+      ],
+      "author": "CharmedSatyr",
+      "license": "GPL-3.0",
+      "bugs": {
+            "url": "https://github.com/CharmedSatyr/voting_app/issues"
+      },
+      "homepage": "https://github.com/CharmedSatyr/voting_app#readme",
+      "dependencies": {
+            "dotenv": "^4.0.0",
+            "express": "^4.15.2",
+            "express-session": "^1.15.2",
+            "mongoose": "^4.9.5",
+            "passport": "^0.3.2",
+            "passport-github": "^1.1.0"
+      }
 }

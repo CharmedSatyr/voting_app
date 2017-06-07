@@ -1,39 +1,29 @@
 'use strict';
 
-const express = require('express'),
-   routes = require('./app/routes/index.js'),
-   mongoose = require('mongoose'),
-   passport = require('passport'),
-   session = require('express-session');
+const express = require('express');
+const routes = require('./routes/routes.js');
+const mongoose = require('mongoose');
+const path = require('path');
 
 const app = express();
 require('dotenv')
    .load();
-require('./app/config/passport')(passport);
 
-const port = process.env.PORT || 8080,
-   mongo_uri = process.env.MONGO_URI || 'mongodb://localhost:27017/voting_app';
+const port = process.env.PORT || 8080;
+const mongo_uri = process.env.MONGO_URI || 'mongodb://localhost:27017/voting_app';
+const db = mongoose.connection;
 
-const path = process.cwd();
-
-mongoose.connect(mongo_uri);
+mongoose.connect(mongo_uri, (err, db) => {
+   (err) ?
+   console.error('Database failed to connect!'): console.log('Connected to Mongo database.');
+});
 mongoose.Promise = global.Promise;
 
-app.use('/controllers', express.static(path + '/app/controllers'));
-app.use('/views', express.static(path + '/views'));
-app.use('/common', express.static(path + '/app/common'));
+app.use('/common', express.static(path.join(__dirname, '/common')));
+app.use('/controllers', express.static(path.join(__dirname, '/controllers')));
 
-app.use(session({
-   secret: 'secretCharm',
-   resave: false,
-   saveUninitialized: true
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-routes(app, passport);
+routes(app);
 
 app.listen(port, () => {
-   console.log('Node.js listening on port ' + port + '...');
+   console.log('Node.js listening on port', port + '.');
 });

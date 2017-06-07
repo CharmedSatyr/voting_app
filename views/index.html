@@ -1,39 +1,85 @@
-<!DOCTYPE html>
-
 <html>
 
   <head>
-    <title>Clementine.js - The elegant and lightweight full stack JavaScript boilerplate.</title>
-
-    <link href="/views/css/main.css" rel="stylesheet" type="text/css">
+    <title>Charmed Voting App</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <meta charset='utf-8' />
+    <meta lang='en' />
   </head>
 
-  <header>
-    <p>Welcome, <span id="display-name"></span>!</p>
-    <a class="menu" href="/profile">Profile</a>
-    <p>|</p>
-    <a class="menu" href="/logout">Logout</a>
-  </header>
-
   <body>
-    <div class="container">
-      <img src="/views/img/clementine_150.png" />
-      <br />
-      <p class="clementine-text">Clementine.js</p>
-    </div>
-
-    <div class="container">
-      <p>You have clicked the button <span id="click-nbr"></span> times.</p>
-      <br />
-      <div class="btn-container">
-        <button type="submit" class="btn btn-add">CLICK ME!</button>
-        <button class="btn btn-delete">RESET</button>
+    <header>
+      Charmed Polling
+    </header>
+    <main>
+      {{#login}}
+      <section>
+        <h2>Welcome! Login to view and create polls.</h2>
+        <button onclick='home();'>Login</button>
+      </section>
+      {{/login}} {{#logout}}
+      <section>
+        <button onclick='logout()'>Logout</button>
+      </section>
+      {{/logout}} {{#pollCreateAndSelect}}
+      <br/>
+      <section>
+        <form>
+          <fieldset>
+            <label>Create a new poll</label>
+            <input id='enterPollTitle'></input>
+            <button id='submitPollTitleButton' type='submit'>Submit</button>
+          </fieldset>
+        </form>
+      </section>
+      <section id='existingPolls'>
+      </section>
+      {{/pollCreateAndSelect}}
+      <br/> {{#viewExistingPoll}} {{title}}
+      <br/> by {{author}}<br/> created {{date}}
+      <br/>
+      <br/>
+      <button type='button' onclick='home()'>Back to poll creation</button>
+      <br/>
+      <br/>
+      <section>
+        <form>
+          <fieldset><label>Enter a candidate</label>
+            <input id='enterCandidate'></input>
+            <button id='submitCandidateButton' type='submit'>Submit</button>
+          </fieldset>
+        </form>
+      </section>
+      <form action='#'>
+        <fieldset>
+          <select id='dropdown-vote'></select>
+          <button type='submit' onclick='voteForCandidate()'>Vote</button>
+        </fieldset>
+      </form>
+      <div style='width: 250px; height: 150px'>
+        <canvas id='myChart'></canvas>
       </div>
-    </div>
+      <form action='#'>
+        <fieldset>
+          <select id='dropdown-remove'></select>
+          <button id='removeCandidateButton' type='submit'>Remove Candidate</button>
+        </fieldset>
+      </form>
+      <button type='submit' onclick='deletePoll()'>Delete Poll</button> {{/viewExistingPoll}}
+    </main>
 
-    <script type="text/javascript" src="common/ajax-functions.js"></script>
-    <script type="text/javascript" src="controllers/clickController.client.js"></script>
-    <script type="text/javascript" src="controllers/userController.client.js"></script>
+
+    <script type='text/javascript' src='/common/ajax-functions.js'></script>
+    <script type='text/javascript' src='/common/common-functions.js'></script>
+    {{#pollCreateAndSelect}}
+    <script type='text/javascript' src='/controllers/pollController.client.js'></script>
+    {{/pollCreateAndSelect}} {{#viewExistingPoll}}
+    <script type='text/javascript' src='/common/Chart.min.js'></script>
+    <script type='text/javascript' src='/common/chart-template.js'></script>
+    <script type='text/javascript' src='/controllers/candidateController.client.js'></script>
+    {{/viewExistingPoll}}
+
+
   </body>
 
 </html>

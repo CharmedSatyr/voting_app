@@ -8,16 +8,6 @@ const candidatesApiUrl = appUrl + '/api/' + currentPoll + '/candidates/';
 
 const pollsApiUrl = appUrl + '/api/polls/';
 
-//Go back to login screen
-const logout = () => {
-   window.location = appUrl;
-}
-
-//Go back to Polls page
-const home = () => {
-   window.location = appUrl + '/polls';
-}
-
 //Delete a poll
 const deletePoll = () => {
    //   window.confirm();

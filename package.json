@@ -1,23 +1,24 @@
 {
-  "name": "charter",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "chart.js": "^2.5.0",
-    "dotenv": "^4.0.0",
-    "express": "^4.15.3",
-    "express-session": "^1.15.3",
-    "mongoose": "^4.10.2",
-    "mu2": "^0.5.21",
-    "passport": "^0.3.2",
-    "passport-github2": "^0.1.10",
-    "path": "^0.12.7"
-  }
+      "name": "voting_app",
+      "version": "1.0.0",
+      "description": "'Build a Voting App' is a required project for freeCodeCamp Back End Development Certification.",
+      "main": "index.js",
+      "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1"
+      },
+      "keywords": [],
+      "author": "CharmedSatyr",
+      "license": "GPL-3.0",
+      "dependencies": {
+            "chart.js": "^2.5.0",
+            "dotenv": "^4.0.0",
+            "express": "^4.15.3",
+            "express-session": "^1.15.3",
+            "mongoose": "^4.10.2",
+            "mu2": "^0.5.21",
+            "passport": "^0.3.2",
+            "passport-github2": "^0.1.10",
+            "passport-twitter": "^1.0.4",
+            "path": "^0.12.7"
+      }
 }

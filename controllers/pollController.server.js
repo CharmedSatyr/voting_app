@@ -19,6 +19,17 @@ class PollController {
 
       //Create a new poll
       this.addPoll = (req, res) => {
+
+         //Login name
+         let name_view;
+         if (req.user) {
+            name_view = req.user.github.displayName || req.user.twitter.displayName || req.user.github.username ||
+               req.user.twitter.username
+         } else {
+            name_view = 'Captain Anonymous';
+         }
+
+
          Poll
             .findOne({
                'title': req.params.title
@@ -28,12 +39,12 @@ class PollController {
                   console.error(err);
                }
                if (result) {
-                  console.log('Duplicate poll entry:', result.title);
                   res.send('Duplicate poll entry: ' + result.title);
                } else {
+
                   const pollEntry = new Poll({
                      'title': req.params.title,
-                     'author': 'CharmedSatyr',
+                     'author': name_view,
                      'candidates': []
                   });
                   pollEntry.save((err, doc) => {
@@ -98,8 +109,6 @@ class PollController {
                   req.params.poll + '"');
             });
       }
-
-
 
       //Get all candidates for a specified poll
       this.getCandidates = (req, res) => {

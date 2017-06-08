@@ -16,12 +16,19 @@ const mupdate = (obj, file, response) => {
    stream.pipe(response);
 }
 
-module.exports = (app) => {
+module.exports = (app, passport) => {
+
+   const isLoggedIn = (req, res, next) => {
+      req.isAuthenticated() ?
+         next() :
+         res.redirect('/');
+   }
 
    //VIEW - Login Page
    app.route('/')
       .get((req, res) => {
          show = {
+            username: '',
             login: true,
             logout: false,
             pollCreateAndSelect: false,
@@ -33,10 +40,49 @@ module.exports = (app) => {
          mupdate(show, 'index.html', res);
       });
 
+   //Logout
+   app.route('/logout')
+      .get((req, res) => {
+         req.logout();
+         res.redirect('/');
+      });
+
+   //Twitter Auth
+   app.route('/auth/twitter')
+      .get(passport.authenticate('twitter'));
+
+   //Twitter Auth
+   app.route('/auth/twitter/callback')
+      .get(passport.authenticate('twitter', {
+         successRedirect: '/polls',
+         failureRedirect: '/'
+      }));
+
+   //GitHub Auth
+   app.route('/auth/github')
+      .get(passport.authenticate('github'));
+
+   //GitHub Auth
+   app.route('/auth/github/callback')
+      .get(passport.authenticate('github', {
+         successRedirect: '/polls',
+         failureRedirect: '/'
+      }));
+
    //VIEW - Main Polls Page
    app.route('/polls')
       .get((req, res) => {
+
+         let name_view;
+         if (req.user) {
+            name_view = req.user.github.displayName || req.user.twitter.displayName || req.user.github.username ||
+               req.user.twitter.username
+         } else {
+            name_view = 'Captain Anonymous';
+         }
+
          show = {
+            username: name_view,
             login: false,
             logout: true,
             pollCreateAndSelect: true,
@@ -52,12 +98,15 @@ module.exports = (app) => {
    app.route('/polls/:title')
       .get((req, res) => {
 
+         const name_view = req.user.github.displayName || req.user.twitter.displayName || req.user.github.username ||
+            req.user.twitter.username || 'Anonymous';
+
          Poll.findOne({
                'title': req.params.title
             })
             .exec((err, result) => {
-               console.log(result.created);
                show = {
+                  username: name_view,
                   login: false,
                   logout: true,
                   pollCreateAndSelect: false,
@@ -72,8 +121,8 @@ module.exports = (app) => {
 
    //API - Add or remove a poll
    app.route('/api/polls/:title')
-      .post(pollController.addPoll)
-      .delete(pollController.removePoll);
+      .post(isLoggedIn, pollController.addPoll)
+      .delete(isLoggedIn, pollController.removePoll);
 
    //API - Get all polls
    app.route('/api/polls/')
@@ -81,8 +130,8 @@ module.exports = (app) => {
 
    //API - Add, remove, or vote for a candidate
    app.route('/api/:poll/candidates/:name')
-      .put(pollController.addCandidate)
-      .delete(pollController.removeCandidate)
+      .put(isLoggedIn, pollController.addCandidate)
+      .delete(isLoggedIn, pollController.removeCandidate)
       .post(pollController.voteForCandidate);
 
    //API - Get candidates for a specific poll
@@ -90,18 +139,3 @@ module.exports = (app) => {
       .get(pollController.getCandidates);
 
 };
-
-
-app.get('/auth/github',
-   passport.authenticate('github', {
-      scope: ['user:email']
-   }));
-
-app.get('/auth/github/callback',
-   passport.authenticate('github', {
-      failureRedirect: '/'
-   }),
-   function (req, res) {
-      // Successful authentication, redirect home.
-      res.redirect('/polls');
-   });

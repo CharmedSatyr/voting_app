@@ -14,12 +14,29 @@
     <main>
       {{#login}}
       <section>
-        <h2>Welcome! Login to view and create polls.</h2>
-        <button onclick='home();'>Login</button>
+        <h2>Welcome! Log in to create your own polls.</h2>
+        <a href='/polls'>
+          <button>View polls as a Guest</button>
+        </a>
+        <a href='/auth/github'>
+          <button>GitHub Login</button>
+        </a>
+        <a href='/auth/twitter'>
+          <button>Twitter Login</button>
+        </a>
+
       </section>
       {{/login}} {{#logout}}
       <section>
-        <button onclick='logout()'>Logout</button>
+        <h4>YOUR NAME IS: {{username}}</h4>
+
+        <a href='/'>
+          <button>Easy Logout</button>
+        </a>
+        <a href='/logout'>
+          <button>Scary Logout</button>
+        </a>
+
       </section>
       {{/logout}} {{#pollCreateAndSelect}}
       <br/>
@@ -39,7 +56,9 @@
       <br/> by {{author}}<br/> created {{date}}
       <br/>
       <br/>
-      <button type='button' onclick='home()'>Back to poll creation</button>
+      <a href='/polls'>
+        <button type='button'>Back to poll creation</button>
+      </a>
       <br/>
       <br/>
       <section>

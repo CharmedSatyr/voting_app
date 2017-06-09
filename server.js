@@ -13,6 +13,8 @@ require('dotenv')
 require('./config/passport')(passport);
 
 const port = process.env.PORT || 8080;
+let pw = '';
+let un = '';
 const mongo_uri = process.env.MONGO_URI || 'mongodb://localhost:27017/voting_app';
 const db = mongoose.connection;
 
@@ -34,7 +36,6 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 routes(app, passport);
 

@@ -12,6 +12,7 @@
       Charmed Polling
     </header>
     <main>
+      <!--Start Login/Home Page-->
       {{#login}}
       <section>
         <h2>Welcome! Log in to create your own polls.</h2>
@@ -26,20 +27,23 @@
         </a>
 
       </section>
-      {{/login}} {{#logout}}
+      {{/login}}
+      <!--End Login/Home Page-->
+
+      <!--Start Named Header-->
+      {{#logout}}
       <section>
         <h4>YOUR NAME IS: {{username}}</h4>
-
-        <a href='/'>
-          <button>Easy Logout</button>
-        </a>
         <a href='/logout'>
-          <button>Scary Logout</button>
+          <button>Logout</button>
         </a>
 
       </section>
-      {{/logout}} {{#pollCreateAndSelect}}
-      <br/>
+      {{/logout}}
+      <!--End Named Header-->
+
+      <!--Start /polls page-->
+      {{#pollCreate}}
       <section>
         <form>
           <fieldset>
@@ -49,10 +53,15 @@
           </fieldset>
         </form>
       </section>
+      {{/pollCreate}} {{#pollSelect}}
       <section id='existingPolls'>
       </section>
-      {{/pollCreateAndSelect}}
-      <br/> {{#viewExistingPoll}} {{title}}
+      {{/pollSelect}}
+
+      <!--End /polls page-->
+      <br/>
+      <!--Start specific poll template-->
+      {{#viewExistingPoll}} {{title}}
       <br/> by {{author}}<br/> created {{date}}
       <br/>
       <br/>
@@ -61,6 +70,17 @@
       </a>
       <br/>
       <br/>
+
+      <!--Start Vote for existing canddiate section-->
+      <form action='#'>
+        <fieldset>
+          <select id='dropdown-vote'></select>
+          <button type='submit' onclick='voteForCandidate()'>Vote</button>
+        </fieldset>
+      </form>
+      <!--End Vote for existing canddiate section-->
+
+      <!--Start Enter New Canddiate Section-->
       <section>
         <form>
           <fieldset><label>Enter a candidate</label>
@@ -69,35 +89,49 @@
           </fieldset>
         </form>
       </section>
-      <form action='#'>
-        <fieldset>
-          <select id='dropdown-vote'></select>
-          <button type='submit' onclick='voteForCandidate()'>Vote</button>
-        </fieldset>
-      </form>
+      <!--End Enter New Canddiate Section-->
+
+      <!--Start Chart-->
       <div style='width: 250px; height: 150px'>
         <canvas id='myChart'></canvas>
       </div>
+      <!--End Chart-->
+      {{/viewExistingPoll}}
+      <!--End specific poll template-->
+
+      <br/>
+
+      <!--Start Remove Candidate/Poll Section-->
+      {{#removeCandidateOrPoll}}
+
+      <!--Start Remove Candidate Section-->
       <form action='#'>
         <fieldset>
           <select id='dropdown-remove'></select>
           <button id='removeCandidateButton' type='submit'>Remove Candidate</button>
         </fieldset>
       </form>
-      <button type='submit' onclick='deletePoll()'>Delete Poll</button> {{/viewExistingPoll}}
+      <!--End Remove Candidate Section-->
+
+      <!--Start Remove Poll Section-->
+      <button type='submit' onclick='deletePoll()'>Delete Poll</button>
+      <!--End Remove Poll Section-->
+      {{/removeCandidateOrPoll}}
+      <!--End Remove Candidate/Poll Section-->
+
     </main>
 
 
     <script type='text/javascript' src='/common/ajax-functions.js'></script>
     <script type='text/javascript' src='/common/common-functions.js'></script>
-    {{#pollCreateAndSelect}}
+
+    {{#pollControllerScripts}}
     <script type='text/javascript' src='/controllers/pollController.client.js'></script>
-    {{/pollCreateAndSelect}} {{#viewExistingPoll}}
+    {{/pollControllerScripts}} {{#viewExistingPoll}}
     <script type='text/javascript' src='/common/Chart.min.js'></script>
     <script type='text/javascript' src='/common/chart-template.js'></script>
     <script type='text/javascript' src='/controllers/candidateController.client.js'></script>
     {{/viewExistingPoll}}
-
 
   </body>
 

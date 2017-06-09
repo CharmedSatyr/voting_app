@@ -2,10 +2,12 @@
 
 //Adds a candidate immediately to dropdown (no GET required)
 const createCandidateOption = (text, id) => {
+   const dropdown = document.getElementById(id);
    const option = document.createElement('option');
-   option.text = text;
-   document.getElementById(id)
-      .add(option);
+   if (dropdown) {
+      option.text = text;
+      dropdown.add(option);
+   }
 }
 
 //Removes a candidate immediately from dropdown (no GET required)
@@ -14,8 +16,8 @@ const removeCandidateOption = (text, id) => {
       .remove(text);
 }
 
-//Populates 2 dropdowns with the candidates already in the database (needs GET)
-const populateDropdown = (data, id1, id2) => {
+//Populates dropdown-vote with the candidates already in the database (needs GET)
+const populateDropdown = (data, id) => {
    let autolist = [];
    JSON.parse(data)
       .map((item) => {
@@ -23,17 +25,20 @@ const populateDropdown = (data, id1, id2) => {
       });
 
    autolist.map((item) => {
-      createCandidateOption(item, id1);
-   });
-   autolist.map((item) => {
-      createCandidateOption(item, id2);
+      createCandidateOption(item, id);
    });
 }
 
-//Populate dropdown-vote and dropdown-remove with the current candidates when ready
+//Populate dropdown-vote with the current candidates when ready
 ajaxFunctions.ready(ajaxFunctions.ajaxRequest('GET', candidatesApiUrl, (response) => {
-   populateDropdown(response, 'dropdown-vote', 'dropdown-remove');
+   populateDropdown(response, 'dropdown-vote');
 }));
+
+//Populate dropdown-remove with the current candidates when ready
+ajaxFunctions.ready(ajaxFunctions.ajaxRequest('GET', candidatesApiUrl, (response) => {
+   populateDropdown(response, 'dropdown-remove');
+}));
+
 
 //When a new candidate is added, it will be immediately added to the dropdowns and also submitted to the database
 (() => {

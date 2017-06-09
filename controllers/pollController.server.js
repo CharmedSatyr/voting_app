@@ -65,7 +65,7 @@ class PollController {
             })
             .remove()
             .exec();
-         res.send('Deleting poll: ' + req.params.title);
+         res.send('Deleting poll: ' + req.params.title)
       }
 
       //Add a new candidate to a specified poll
@@ -125,7 +125,7 @@ class PollController {
       }
 
       //Vote for a candidate in a specified poll
-      this.voteForCandidate = (req, res) => {
+      this.voteForCandidate_server = (req, res) => {
          Poll.findOneAndUpdate({
                'title': req.params.poll,
                'candidates.name': req.params.name

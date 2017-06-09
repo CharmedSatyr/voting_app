@@ -26,8 +26,6 @@ module.exports = (passport) => {
    }, (token, tokenSecret, profile, cb) => {
       process.nextTick(() => {
 
-         console.log(profile);
-
          User.findOne({
             'twitter.id': profile.id
          }, (err, user) => {
@@ -61,7 +59,7 @@ module.exports = (passport) => {
       callbackURL: configAuth.githubAuth.callbackURL
    }, (token, refreshToken, profile, done) => {
       process.nextTick(() => {
-         console.log(profile);
+
          User.findOne({
             'github.id': profile.id
          }, (err, user) => {

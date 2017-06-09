@@ -6,7 +6,6 @@ const pollController = new PollController();
 
 const mu = require('mu2');
 const path = require('path');
-let show;
 
 mu.root = path.join(process.cwd(), '/views');
 
@@ -18,10 +17,18 @@ const mupdate = (obj, file, response) => {
 
 module.exports = (app, passport) => {
 
-   const isLoggedIn = (req, res, next) => {
-      req.isAuthenticated() ?
-         next() :
-         res.redirect('/');
+   let show, name_view, loggedIn;
+   const permissions = (req, res, next) => {
+      if (req.isAuthenticated()) {
+         loggedIn = true;
+         name_view = req.user.github.displayName || req.user.twitter.displayName || req.user.github.username ||
+            req.user.twitter.username;
+         next();
+      } else {
+         loggedIn = false;
+         name_view = 'Captain Anonymous';
+         next();
+      }
    }
 
    //VIEW - Login Page
@@ -31,21 +38,82 @@ module.exports = (app, passport) => {
             username: '',
             login: true,
             logout: false,
-            pollCreateAndSelect: false,
+            pollControllerScripts: false,
+            pollCreate: false,
+            pollSelect: false,
             viewExistingPoll: false,
             title: '',
             author: '',
-            date: ''
+            date: '',
+            removeCandidateOrPoll: false
          }
          mupdate(show, 'index.html', res);
       });
 
-   //Logout
-   app.route('/logout')
-      .get((req, res) => {
-         req.logout();
-         res.redirect('/');
+
+   //VIEW - Main Polls Page
+   app.route('/polls')
+      .get(permissions, (req, res) => {
+
+         show = {
+            username: name_view,
+            login: false,
+            logout: true,
+            pollControllerScripts: true,
+            pollCreate: loggedIn,
+            pollSelect: true,
+            viewExistingPoll: false,
+            title: '',
+            author: '',
+            date: '',
+            removeCandidateOrPoll: false
+         }
+         mupdate(show, 'index.html', res);
       });
+
+   //VIEW - Poll template
+   app.route('/polls/:title')
+      .get(permissions, (req, res) => {
+
+         Poll.findOne({
+               'title': req.params.title
+            })
+            .exec((err, result) => {
+               show = {
+                  username: name_view,
+                  login: false,
+                  logout: true,
+                  pollControllerScripts: false,
+                  pollCreate: false,
+                  pollSelect: false,
+                  viewExistingPoll: true,
+                  title: req.params.title,
+                  author: result.author,
+                  date: result.created,
+                  removeCandidateOrPoll: loggedIn
+               }
+               mupdate(show, 'index.html', res);
+            });
+      });
+
+   //API - Get all polls
+   app.route('/api/polls/')
+      .get(pollController.getAllPolls);
+
+   //API - Add or remove a poll
+   app.route('/api/polls/:title')
+      .post(pollController.addPoll)
+      .delete(pollController.removePoll);
+
+   //API - Add, remove, or vote for a candidate
+   app.route('/api/:poll/candidates/:name')
+      .put(pollController.addCandidate)
+      .delete(pollController.removeCandidate)
+      .post(pollController.voteForCandidate_server);
+
+   //API - Get candidates for a specific poll
+   app.route('/api/:poll/candidates/')
+      .get(pollController.getCandidates);
 
    //Twitter Auth
    app.route('/auth/twitter')
@@ -69,73 +137,11 @@ module.exports = (app, passport) => {
          failureRedirect: '/'
       }));
 
-   //VIEW - Main Polls Page
-   app.route('/polls')
+   //Auth Logout
+   app.route('/logout')
       .get((req, res) => {
-
-         let name_view;
-         if (req.user) {
-            name_view = req.user.github.displayName || req.user.twitter.displayName || req.user.github.username ||
-               req.user.twitter.username
-         } else {
-            name_view = 'Captain Anonymous';
-         }
-
-         show = {
-            username: name_view,
-            login: false,
-            logout: true,
-            pollCreateAndSelect: true,
-            viewExistingPoll: false,
-            title: '',
-            author: '',
-            date: ''
-         }
-         mupdate(show, 'index.html', res);
+         req.logout();
+         res.redirect('/');
       });
-
-   //VIEW - Poll template
-   app.route('/polls/:title')
-      .get((req, res) => {
-
-         const name_view = req.user.github.displayName || req.user.twitter.displayName || req.user.github.username ||
-            req.user.twitter.username || 'Anonymous';
-
-         Poll.findOne({
-               'title': req.params.title
-            })
-            .exec((err, result) => {
-               show = {
-                  username: name_view,
-                  login: false,
-                  logout: true,
-                  pollCreateAndSelect: false,
-                  viewExistingPoll: true,
-                  title: req.params.title,
-                  author: result.author,
-                  date: result.created
-               }
-               mupdate(show, 'index.html', res);
-            });
-      });
-
-   //API - Add or remove a poll
-   app.route('/api/polls/:title')
-      .post(isLoggedIn, pollController.addPoll)
-      .delete(isLoggedIn, pollController.removePoll);
-
-   //API - Get all polls
-   app.route('/api/polls/')
-      .get(pollController.getAllPolls);
-
-   //API - Add, remove, or vote for a candidate
-   app.route('/api/:poll/candidates/:name')
-      .put(isLoggedIn, pollController.addCandidate)
-      .delete(isLoggedIn, pollController.removeCandidate)
-      .post(pollController.voteForCandidate);
-
-   //API - Get candidates for a specific poll
-   app.route('/api/:poll/candidates/')
-      .get(pollController.getCandidates);
 
 };

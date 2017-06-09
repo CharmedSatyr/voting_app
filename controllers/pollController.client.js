@@ -23,7 +23,6 @@ const createPollButton = (text) => {
 
    const br = document.createElement('br');
    existingPolls.appendChild(br);
-
 }
 
 //Populates existing with the candidates already in the database
@@ -46,17 +45,19 @@ ajaxFunctions.ready(ajaxFunctions.ajaxRequest('GET', pollsApiUrl, populatePolls)
 (() => {
    const submitPollTitleButton = document.getElementById('submitPollTitleButton');
 
-   submitPollTitleButton.addEventListener('click', () => {
+   if (submitPollTitleButton) {
+      submitPollTitleButton.addEventListener('click', () => {
 
-      const pollSubmitted = document.getElementById('enterPollTitle')
-         .value;
+         const pollSubmitted = document.getElementById('enterPollTitle')
+            .value;
 
-      ajaxFunctions.ajaxRequest('POST', pollsApiUrl + pollSubmitted, (response) => {
-         console.log(response);
-      });
+         ajaxFunctions.ajaxRequest('POST', pollsApiUrl + pollSubmitted, (response) => {
+            console.log(response);
+         });
 
-      //Immediately add to existingPolls
-      createPollButton(pollSubmitted);
+         //Immediately add to existingPolls
+         createPollButton(pollSubmitted);
 
-   }, false);
+      }, false);
+   }
 })();

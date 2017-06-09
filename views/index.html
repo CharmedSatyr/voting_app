@@ -33,7 +33,7 @@
       <!--Start Named Header-->
       {{#logout}}
       <section>
-        <h4>YOUR NAME IS: {{username}}</h4>
+        <h2>Welcome, {{username}}!</h2>
         <a href='/logout'>
           <button>Logout</button>
         </a>
@@ -41,7 +41,7 @@
       </section>
       {{/logout}}
       <!--End Named Header-->
-
+      <br/>
       <!--Start /polls page-->
       {{#pollCreate}}
       <section>
@@ -92,7 +92,7 @@
       <!--End Enter New Canddiate Section-->
 
       <!--Start Chart-->
-      <div style='width: 250px; height: 150px'>
+      <div style='width: 40%; height: 40%'>
         <canvas id='myChart'></canvas>
       </div>
       <!--End Chart-->

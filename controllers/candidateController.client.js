@@ -67,23 +67,24 @@ ajaxFunctions.ready(ajaxFunctions.ajaxRequest('GET', candidatesApiUrl, (response
 (() => {
    const removeCandidateButton = document.getElementById('removeCandidateButton');
 
-   removeCandidateButton.addEventListener('click', () => {
+   if (removeCandidateButton) {
+      removeCandidateButton.addEventListener('click', () => {
 
-      const remove = document.getElementById('dropdown-remove')
-         .value;
+         const remove = document.getElementById('dropdown-remove')
+            .value;
 
-      ajaxFunctions.ajaxRequest('DELETE', candidatesApiUrl + remove, (response) => {
-         console.log(response);
-      });
+         ajaxFunctions.ajaxRequest('DELETE', candidatesApiUrl + remove, (response) => {
+            console.log(response);
+         });
 
-      //Immediately remove from dropdown
-      removeCandidateOption(remove, 'dropdown-vote');
-      removeCandidateOption(remove, 'dropdown-remove');
-      //Update the chart with the new label
-      updateChart();
+         //Immediately remove from dropdown
+         removeCandidateOption(remove, 'dropdown-vote');
+         removeCandidateOption(remove, 'dropdown-remove');
+         //Update the chart with the new label
+         updateChart();
 
-   }, false);
-
+      }, false);
+   }
 })();
 
 //Vote for a specified candidate in the dropdown

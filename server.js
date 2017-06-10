@@ -26,7 +26,7 @@ mongoose.Promise = global.Promise;
 
 app.use('/common', express.static(path.join(__dirname, '/common')));
 app.use('/controllers', express.static(path.join(__dirname, '/controllers')));
-
+app.use('/styles', express.static(path.join(__dirname, '/views/styles'))); //The first argument creates the virtual 'styles' directory used in index.html
 
 app.use(session({
    secret: 'secretCharm',

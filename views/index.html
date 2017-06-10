@@ -5,11 +5,24 @@
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <meta charset='utf-8' />
     <meta lang='en' />
+    <style type='text/css'>
+      header {
+        margin: 2%;
+      }
+
+      body {
+
+        margin: 1%;
+        text-align: center;
+      }
+    </style>
+
+    <link type='text/css' rel='stylesheet' href='/styles/css/bootstrap.min.css' />
   </head>
 
   <body>
     <header>
-      Charmed Polling
+      <h3>Charmed Polling</h3>
     </header>
     <main>
       <!--Start Login/Home Page-->
@@ -33,7 +46,7 @@
       <!--Start Named Header-->
       {{#logout}}
       <section>
-        <h2>Welcome, {{username}}!</h2>
+        <h4>Welcome, {{username}}!</h4>
         <a href='/logout'>
           <button>Logout</button>
         </a>
@@ -41,7 +54,6 @@
       </section>
       {{/logout}}
       <!--End Named Header-->
-      <br/>
       <!--Start /polls page-->
       {{#pollCreate}}
       <section>
@@ -54,16 +66,16 @@
         </form>
       </section>
       {{/pollCreate}} {{#pollSelect}}
+      <h4>Select a poll from the options below.</h4>
       <section id='existingPolls'>
-      </section>
-      {{/pollSelect}}
+      </section> {{/pollSelect}}
 
       <!--End /polls page-->
       <br/>
       <!--Start specific poll template-->
-      {{#viewExistingPoll}} {{title}}
-      <br/> by {{author}}<br/> created {{date}}
-      <br/>
+      {{#viewExistingPoll}}
+      <h4><strong>Poll:</strong> {{title}}<h4>
+      <h5> by {{author}}<br/> created {{date}}</h5>
       <br/>
       <a href='/polls'>
         <button type='button'>Back to poll creation</button>
@@ -92,9 +104,11 @@
       <!--End Enter New Canddiate Section-->
 
       <!--Start Chart-->
-      <div style='width: 40%; height: 40%'>
-        <canvas id='myChart'></canvas>
-      </div>
+      <section>
+        <div style='position: relative; left: 0; right: 0; margin: auto; height: 25vh; width: 50vw;'>
+          <canvas id='myChart'></canvas>
+        </div>
+      </section>
       <!--End Chart-->
       {{/viewExistingPoll}}
       <!--End specific poll template-->
@@ -103,19 +117,20 @@
 
       <!--Start Remove Candidate/Poll Section-->
       {{#removeCandidateOrPoll}}
-
       <!--Start Remove Candidate Section-->
-      <form action='#'>
-        <fieldset>
-          <select id='dropdown-remove'></select>
-          <button id='removeCandidateButton' type='submit'>Remove Candidate</button>
-        </fieldset>
-      </form>
+      <section style='position: relative; margin-top: 25vh; margin-bottom: 10px;'>
+        <form action='#'>
+          <fieldset>
+            <select id='dropdown-remove'></select>
+            <button id='removeCandidateButton' type='submit'>Remove Candidate</button>
+          </fieldset>
+        </form>
       <!--End Remove Candidate Section-->
 
       <!--Start Remove Poll Section-->
-      <button type='submit' onclick='deletePoll()'>Delete Poll</button>
+        <button type='submit' onclick='deletePoll()'>Delete Poll</button>
       <!--End Remove Poll Section-->
+    </section>
       {{/removeCandidateOrPoll}}
       <!--End Remove Candidate/Poll Section-->
 

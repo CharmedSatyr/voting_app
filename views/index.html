@@ -30,13 +30,13 @@
       <section>
         <h2>Welcome! Log in to create your own polls.</h2>
         <a href='/polls'>
-          <button>View polls as a Guest</button>
+          <button class='btn btn-default'>View polls as a Guest</button>
         </a>
         <a href='/auth/github'>
-          <button>GitHub Login</button>
+          <button class='btn btn-default'>GitHub Login</button>
         </a>
         <a href='/auth/twitter'>
-          <button>Twitter Login</button>
+          <button class='btn btn-default'>Twitter Login</button>
         </a>
 
       </section>
@@ -48,7 +48,7 @@
       <section>
         <h4>Welcome, {{username}}!</h4>
         <a href='/logout'>
-          <button>Logout</button>
+          <button class='btn btn-default'>Logout</button>
         </a>
 
       </section>
@@ -61,7 +61,7 @@
           <fieldset>
             <label>Create a new poll</label>
             <input id='enterPollTitle'></input>
-            <button id='submitPollTitleButton' type='submit'>Submit</button>
+            <button class='btn btn-default' id='submitPollTitleButton' type='submit'>Submit</button>
           </fieldset>
         </form>
       </section>
@@ -78,7 +78,7 @@
       <h5> by {{author}}<br/> created {{date}}</h5>
       <br/>
       <a href='/polls'>
-        <button type='button'>Back to poll creation</button>
+        <button class='btn btn-default' type='button'>Back to poll creation</button>
       </a>
       <br/>
       <br/>
@@ -87,7 +87,7 @@
       <form action='#'>
         <fieldset>
           <select id='dropdown-vote'></select>
-          <button type='submit' onclick='voteForCandidate()'>Vote</button>
+          <button class='btn btn-default' type='submit' onclick='voteForCandidate()'>Vote</button>
         </fieldset>
       </form>
       <!--End Vote for existing canddiate section-->
@@ -98,7 +98,7 @@
         <form>
           <fieldset><label>Enter a candidate</label>
             <input id='enterCandidate'></input>
-            <button id='submitCandidateButton' type='submit'>Submit</button>
+            <button class='btn btn-default' id='submitCandidateButton' type='submit'>Submit</button>
           </fieldset>
         </form>
       </section>
@@ -124,13 +124,13 @@
         <form action='#'>
           <fieldset>
             <select id='dropdown-remove'></select>
-            <button id='removeCandidateButton' type='submit'>Remove Candidate</button>
+            <button class='btn btn-default' id='removeCandidateButton' type='submit'>Remove Candidate</button>
           </fieldset>
         </form>
       <!--End Remove Candidate Section-->
 
       <!--Start Remove Poll Section-->
-        <button type='submit' onclick='deletePoll()'>Delete Poll</button>
+        <button class='btn btn-default' type='submit' onclick='deletePoll()'>Delete Poll</button>
       <!--End Remove Poll Section-->
     </section>
       {{/removeCandidateOrPoll}}

@@ -1,9 +1,9 @@
 # Voting App
 ### "Build a Voting App" is a requirement for freeCodeCamp's Back End Development Certification: https://www.freecodecamp.com/challenges/build-a-voting-app
 
-**Date Completed: TBA**
+**Date Completed: June 10, 2017**
 
-See the project on Heroku at: https://charmed-urls.herokuapp.com/
+See the project on Heroku at: https://charmed-polling.herokuapp.com/
 
 >1. **Objective**: Build a full stack JavaScript app that is functionally similar to this: https://fcc-voting-arthow4n.herokuapp.com/ and deploy it to Heroku.
 

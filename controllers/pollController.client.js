@@ -11,6 +11,7 @@ const createPollButton = (text) => {
 
    const existingPolls = document.getElementById('existingPolls');
    const btn = document.createElement('button');
+   btn.className = 'btn btn-default';
    const t = document.createTextNode(text);
    btn.appendChild(t);
    btn.title = text;
